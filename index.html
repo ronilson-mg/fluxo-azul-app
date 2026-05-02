@@ -1101,11 +1101,36 @@
     </div>
     <div class="form-footer">
       <div></div>
-      <a class="form-link">Esqueci minha senha</a>
+      <a class="form-link" onclick="abrirEsqueciSenha()">Esqueci minha senha</a>
     </div>
     <button class="btn btn-primary btn-full" onclick="doLogin()">Entrar</button>
     <div class="auth-register">
       Não tem conta? <a class="form-link" onclick="showRegister()">Criar conta gratuita</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ ESQUECI SENHA ═══════════════ -->
+<div id="esqueciScreen" class="auth-screen" style="display:none">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="logo-icon">⚡</div>
+      <div>
+        <h1>Fluxo Azul</h1>
+        <p>Recuperar acesso</p>
+      </div>
+    </div>
+    <div class="auth-title">Esqueceu sua senha?</div>
+    <div class="auth-sub">Digite seu e-mail e enviaremos um link para criar uma nova senha</div>
+    <div class="form-group">
+      <label>E-mail cadastrado</label>
+      <input type="email" id="resetEmail" placeholder="seu@email.com">
+    </div>
+    <button class="btn btn-primary btn-full" onclick="enviarResetSenha()">
+      📧 Enviar link de recuperação
+    </button>
+    <div class="auth-register" style="margin-top:20px">
+      <a class="form-link" onclick="showLogin()">← Voltar para o login</a>
     </div>
   </div>
 </div>
@@ -1912,10 +1937,28 @@ async function doLogout() {
   document.getElementById('loginScreen').style.display = 'flex';
 }
 
-function showApp() {
+async function showApp() {
   document.getElementById('loginScreen').style.display = 'none';
   document.getElementById('registerScreen').style.display = 'none';
   document.getElementById('appScreen').style.display = 'block';
+
+  // PRIMEIRO: identificar o usuário
+  try {
+    const { data: { user } } = await sb.auth.getUser();
+    if(user) {
+      currentUserEmail = user.email;
+      console.log('showApp - usuário:', currentUserEmail);
+      // Se admin, mostrar menu ANTES de qualquer outra coisa
+      if(currentUserEmail === ADMIN_EMAIL) {
+        console.log('É ADMIN - mostrando menu admin');
+        mostrarMenuAdmin();
+      }
+    }
+  } catch(e) {
+    console.log('Erro ao identificar usuário:', e);
+  }
+
+  // DEPOIS: inicializar o app
   initApp();
   verificarTrial();
   updateProfileUI();
@@ -1998,12 +2041,18 @@ async function verificarTrial() {
 }
 
 function mostrarMenuAdmin() {
-  if(currentUserEmail !== ADMIN_EMAIL) return;
+  // Já verificado antes de chamar esta função
   const adminNav = document.getElementById('adminNavItem');
-  if(adminNav) adminNav.style.display = 'block';
-  // Mostrar também no menu de perfil
+  if(adminNav) {
+    adminNav.style.display = 'block';
+    adminNav.style.visibility = 'visible';
+  }
   const adminMenuBtn = document.getElementById('adminMenuBtn');
-  if(adminMenuBtn) adminMenuBtn.style.display = 'flex';
+  if(adminMenuBtn) {
+    adminMenuBtn.style.display = 'flex';
+    adminMenuBtn.style.visibility = 'visible';
+  }
+  console.log('Admin ativado para:', currentUserEmail);
 }
 
 function atualizarContadorTrial(diasRestantes, planoAtivo, plano) {
@@ -2143,7 +2192,41 @@ function showRegister() {
 
 function showLogin() {
   document.getElementById('registerScreen').style.display = 'none';
+  document.getElementById('esqueciScreen').style.display = 'none';
   document.getElementById('loginScreen').style.display = 'flex';
+}
+
+function abrirEsqueciSenha() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('esqueciScreen').style.display = 'flex';
+  // Preencher email se já tiver digitado
+  const loginEmail = document.getElementById('loginEmail').value;
+  const resetEmail = document.getElementById('resetEmail');
+  if(loginEmail && resetEmail) resetEmail.value = loginEmail;
+}
+
+async function enviarResetSenha() {
+  const email = document.getElementById('resetEmail').value.trim();
+  if(!email) { showToast('Digite seu e-mail', '⚠️'); return; }
+
+  showToast('Enviando...', '⏳');
+
+  const { error } = await sb.auth.resetPasswordForEmail(email, {
+    redirectTo: 'https://ronilson-mg.github.io/fluxo-azul-app'
+  });
+
+  if(error) {
+    showToast('Erro: ' + error.message, '❌');
+    return;
+  }
+
+  showToast('E-mail enviado! Verifique sua caixa de entrada 📧', '✅');
+
+  // Voltar para login após 3 segundos
+  setTimeout(() => {
+    document.getElementById('esqueciScreen').style.display = 'none';
+    document.getElementById('loginScreen').style.display = 'flex';
+  }, 3000);
 }
 
 // Checar sessão ao carregar
@@ -2826,15 +2909,14 @@ async function updateProfileUI() {
     if(profileName) profileName.textContent = name;
     if(profileEmail) profileEmail.textContent = user.email;
 
-    // Mostrar admin no menu de perfil se for admin
-    if(user.email === ADMIN_EMAIL) {
-      const adminMenuBtn = document.getElementById('adminMenuBtn');
-      if(adminMenuBtn) adminMenuBtn.style.display = 'flex';
-    }
-
     // Atualizar sidebar user info
     const userName = document.querySelector('.user-name');
     if(userName) userName.textContent = name;
+
+    // Verificar admin novamente para garantir
+    if(user.email === ADMIN_EMAIL) {
+      mostrarMenuAdmin();
+    }
   } catch(e) {}
 }
 
