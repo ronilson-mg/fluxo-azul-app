@@ -1927,7 +1927,8 @@ const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
     autoRefreshToken: true,
     persistSession: true,
     detectSessionInUrl: true,
-    flowType: 'implicit'
+    flowType: 'implicit',
+    storageKey: 'fluxoazul-auth'
   }
 });
 
@@ -2484,7 +2485,8 @@ async function saveSettings() {
 // CLIENTS — SUPABASE
 // ═══════════════════════════════════════
 async function loadClients() {
-  const { data, error } = await sb.from('fa_clients').select('*').order('created_at', { ascending: false });
+  const { data: { user: userLC } } = await sb.auth.getUser();
+  const { data, error } = await sb.from('fa_clients').select('*').eq('user_id', userLC.id).order('created_at', { ascending: false });
   if(!error && data) clients = data;
 }
 
@@ -2494,7 +2496,8 @@ async function addClient() {
   const email = document.getElementById('newClientEmail').value.trim();
   const notes = document.getElementById('newClientNotes').value.trim();
   if(!name || !phone) { showToast('Preencha nome e telefone', '⚠️'); return; }
-  const { data, error } = await sb.from('fa_clients').insert({ name, phone, email, notes }).select().single();
+  const { data: { user: userC } } = await sb.auth.getUser();
+  const { data, error } = await sb.from('fa_clients').insert({ name, phone, email, notes, user_id: userC.id }).select().single();
   if(error) { showToast('Erro ao salvar cliente', '❌'); return; }
   clients.unshift(data);
   closeModal('clientModal');
@@ -2509,8 +2512,9 @@ async function addClient() {
 
 async function deleteClient(id) {
   if(!confirm('Excluir este cliente e todas as cobranças dele?')) return;
-  await sb.from('fa_invoices').delete().eq('client_id', id);
-  await sb.from('fa_clients').delete().eq('id', id);
+  const { data: { user: userDel } } = await sb.auth.getUser();
+  await sb.from('fa_invoices').delete().eq('client_id', id).eq('user_id', userDel.id);
+  await sb.from('fa_clients').delete().eq('id', id).eq('user_id', userDel.id);
   clients = clients.filter(c => c.id !== id);
   invoices = invoices.filter(i => i.client_id !== id);
   renderClients(); renderInvoices(); renderUrgent();
@@ -2524,7 +2528,8 @@ function filterClients(v) { renderClients(v); }
 // INVOICES — SUPABASE
 // ═══════════════════════════════════════
 async function loadInvoices() {
-  const { data, error } = await sb.from('fa_invoices').select('*').order('created_at', { ascending: false });
+  const { data: { user: userLI } } = await sb.auth.getUser();
+  const { data, error } = await sb.from('fa_invoices').select('*').eq('user_id', userLI.id).order('created_at', { ascending: false });
   if(!error && data) invoices = data;
 }
 
@@ -2535,9 +2540,11 @@ async function addInvoice() {
   const description = document.getElementById('newInvDesc').value.trim();
   if(!clientId || !amount || !due_date || !description) { showToast('Preencha todos os campos', '⚠️'); return; }
   const client = clients.find(c => c.id === clientId);
+  const { data: { user: userI } } = await sb.auth.getUser();
   const { data, error } = await sb.from('fa_invoices').insert({
     client_id: clientId, client_name: client.name,
-    description, amount, due_date, status: 'open'
+    description, amount, due_date, status: 'open',
+    user_id: userI.id
   }).select().single();
   if(error) { showToast('Erro ao criar cobrança', '❌'); return; }
   invoices.unshift(data);
@@ -2552,7 +2559,8 @@ async function addInvoice() {
 
 async function markPaid(id) {
   const paid_at = new Date().toISOString();
-  await sb.from('fa_invoices').update({ status: 'paid', paid_at }).eq('id', id);
+  const { data: { user: userMP } } = await sb.auth.getUser();
+  await sb.from('fa_invoices').update({ status: 'paid', paid_at }).eq('id', id).eq('user_id', userMP.id);
   const inv = invoices.find(i => i.id === id);
   if(inv) { inv.status = 'paid'; inv.paid_at = paid_at; }
   renderInvoices(); renderUrgent(); updateDashboard(); updateAcaoHoje();
@@ -2561,7 +2569,8 @@ async function markPaid(id) {
 
 async function deleteInvoice(id) {
   if(!confirm('Excluir esta cobrança?')) return;
-  await sb.from('fa_invoices').delete().eq('id', id);
+  const { data: { user: userDI } } = await sb.auth.getUser();
+  await sb.from('fa_invoices').delete().eq('id', id).eq('user_id', userDI.id);
   invoices = invoices.filter(i => i.id !== id);
   renderInvoices(); renderUrgent();
   showToast('Cobrança removida', '🗑️');
