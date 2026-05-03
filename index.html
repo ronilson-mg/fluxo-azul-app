@@ -1504,20 +1504,31 @@
           <p>Invista em organização e recupere muito mais do que paga</p>
         </div>
 
+        <!-- MEU PLANO ATUAL -->
+        <div id="meuPlanoCard" style="background:var(--teal-glow);border:1px solid var(--border-hover);border-radius:var(--radius);padding:20px;margin-bottom:24px">
+          <div style="font-size:12px;color:var(--teal);font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px">⚡ Seu plano atual</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+            <div>
+              <div id="planoAtualNome" style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--text)">Trial</div>
+              <div id="planoAtualExpira" style="font-size:13px;color:var(--text-muted)">Carregando...</div>
+            </div>
+            <a href="https://wa.me/5531984132145?text=Olá! Quero fazer upgrade do meu plano no Fluxo Azul!" target="_blank" class="btn btn-primary btn-sm">💬 Fazer Upgrade</a>
+          </div>
+        </div>
+
         <div class="plans-grid">
           <div class="plan-card">
             <div class="plan-icon">⚡</div>
             <div class="plan-name">Trial</div>
             <div class="plan-price">R$ 0</div>
-            <div class="plan-period">/14 dias</div>
-            <div class="plan-desc">Degustação completa do sistema</div>
+            <div class="plan-period">/14 dias — sem cartão</div>
             <ul class="plan-features">
-              <li>Até 5 clientes</li>
-              <li>Até 10 cobranças</li>
-              <li>Gerador WhatsApp</li>
-              <li>Dashboard básico</li>
+              <li>Até 10 clientes</li>
+              <li>Cobranças ilimitadas</li>
+              <li>Gerador WhatsApp + Pix</li>
+              <li>Dashboard completo</li>
             </ul>
-            <button class="btn btn-ghost btn-full">Plano atual</button>
+            <button class="btn btn-ghost btn-full" disabled>Plano gratuito</button>
           </div>
 
           <div class="plan-card popular">
@@ -1526,48 +1537,43 @@
             <div class="plan-name">Pro</div>
             <div class="plan-price">R$ 69,90</div>
             <div class="plan-period">/mês — cancele quando quiser</div>
-            <div class="plan-desc">Para quem quer crescer com controle</div>
             <ul class="plan-features">
               <li>Clientes ilimitados</li>
               <li>Cobranças ilimitadas</li>
               <li>Gerador WhatsApp + Pix</li>
               <li>Dashboard completo</li>
               <li>Painel de Vitórias</li>
-              <li>Suporte prioritário</li>
+              <li>Suporte 9h-18h</li>
             </ul>
-            <button class="btn btn-primary btn-full" onclick="openWaPlan('Pro', 'R$ 69,90')">Assinar Pro →</button>
+            <button class="btn btn-primary btn-full" onclick="upgradePlano('Pro', '69,90')">Assinar Pro →</button>
           </div>
 
           <div class="plan-card">
             <div class="plan-icon">🚀</div>
             <div class="plan-name">Business</div>
-            <div class="plan-price">R$ 149,90</div>
+            <div class="plan-price">R$ 97,90</div>
             <div class="plan-period">/mês</div>
-            <div class="plan-desc">Para negócios em expansão</div>
             <ul class="plan-features">
               <li>Tudo do Pro</li>
-              <li>Relatórios em PDF</li>
-              <li>Carteira expandida</li>
-              <li>Análise de inadimplência</li>
-              <li>Suporte VIP</li>
+              <li>Relatório PDF mensal</li>
+              <li>Backup CSV semanal por e-mail</li>
+              <li>Sua logo nos links de cobrança</li>
             </ul>
-            <button class="btn btn-outline btn-full" onclick="openWaPlan('Business', 'R$ 149,90')">Assinar Business</button>
+            <button class="btn btn-outline btn-full" onclick="upgradePlano('Business', '97,90')">Assinar Business</button>
           </div>
 
           <div class="plan-card">
             <div class="plan-icon">💎</div>
             <div class="plan-name">Premium</div>
-            <div class="plan-price">R$ 299,90</div>
+            <div class="plan-price">R$ 147,90</div>
             <div class="plan-period">/mês</div>
-            <div class="plan-desc">Automação e integração total</div>
             <ul class="plan-features">
               <li>Tudo do Business</li>
-              <li>Automação WhatsApp</li>
-              <li>API de integração</li>
-              <li>Suporte dedicado 24h</li>
-              <li>Onboarding personalizado</li>
+              <li>Mentoria 1h/mês via WhatsApp</li>
+              <li>Canal de sugestões prioritário</li>
+              <li>Acesso antecipado a novidades</li>
             </ul>
-            <button class="btn btn-outline btn-full" onclick="openWaPlan('Premium', 'R$ 299,90')">Assinar Premium</button>
+            <button class="btn btn-outline btn-full" onclick="upgradePlano('Premium', '147,90')">Assinar Premium</button>
           </div>
         </div>
       </div>
@@ -1603,8 +1609,13 @@
             <h3>Usuários Cadastrados</h3>
             <button class="btn btn-outline btn-sm" onclick="loadAdminUsers()">🔄 Atualizar</button>
           </div>
+          <!-- ABAS ADMIN -->
+          <div style="display:flex;gap:0;border-bottom:1px solid var(--border)">
+            <button id="abaUsuarios" onclick="switchAdminTab('usuarios')" style="padding:12px 20px;font-size:13px;font-weight:600;border:none;background:var(--teal-glow);color:var(--teal);cursor:pointer;border-bottom:2px solid var(--teal)">👥 Usuários do FluxoAzul</button>
+            <button id="abaClientes" onclick="switchAdminTab('clientes')" style="padding:12px 20px;font-size:13px;font-weight:600;border:none;background:transparent;color:var(--text-muted);cursor:pointer;border-bottom:2px solid transparent">📋 Todos os Clientes</button>
+          </div>
           <div id="adminUsersList">
-            <div style="text-align:center;padding:40px;color:var(--text-muted)">Carregando usuários...</div>
+            <div style="text-align:center;padding:40px;color:var(--text-muted)">Carregando...</div>
           </div>
         </div>
       </div>
@@ -1648,6 +1659,19 @@
           </div>
           <div class="form-group"><label>Nova Senha</label><input type="password" id="accountPassword" placeholder="Deixe em branco para manter a atual"></div>
           <button class="btn btn-primary" onclick="updateAccount()">Atualizar Conta</button>
+        </div>
+
+        <!-- FUNÇÕES ESPECIAIS POR PLANO -->
+        <div class="settings-section">
+          <h3>📄 Relatório Mensal PDF</h3>
+          <p>Exporte um relatório completo do mês com clientes e cobranças — disponível no plano Business e Premium</p>
+          <button class="btn btn-primary" onclick="gerarRelatorioPDF()">📄 Gerar Relatório do Mês</button>
+        </div>
+
+        <div class="settings-section">
+          <h3>🎯 Agendar Mentoria</h3>
+          <p>1 hora de mentoria por mês com o fundador — exclusivo para assinantes Premium</p>
+          <button class="btn btn-outline" onclick="agendarMentoria()">🎯 Agendar Minha Mentoria</button>
         </div>
 
         <div class="settings-section">
@@ -1799,6 +1823,20 @@
     <a class="wa-link-btn" id="waPlanLink" href="#" target="_blank">
       📱 Falar com Suporte no WhatsApp
     </a>
+  </div>
+</div>
+
+<!-- MODAL LIMITE DE PLANO -->
+<div class="modal-overlay" id="limiteModal">
+  <div class="modal" style="max-width:420px;text-align:center">
+    <div class="modal-header">
+      <h3 id="limiteTitulo">🔒 Limite atingido</h3>
+      <button class="modal-close" onclick="closeModal('limiteModal')">✕</button>
+    </div>
+    <div style="font-size:15px;color:var(--text);margin-bottom:10px" id="limiteDesc"></div>
+    <div style="font-size:13px;color:var(--text-muted);margin-bottom:24px" id="limiteDetalhe"></div>
+    <button id="limiteBtn" class="btn btn-primary btn-full" style="margin-bottom:10px">💬 Fazer Upgrade</button>
+    <button onclick="closeModal('limiteModal')" class="btn btn-ghost btn-full">Agora não</button>
   </div>
 </div>
 
@@ -2106,6 +2144,7 @@ async function verificarTrial() {
 
     // Atualizar UI
     atualizarContadorTrial(diasRestantes, planoAtivo, currentSubscription.plano);
+    atualizarInfoPlano();
 
     // Bloquear se expirado e não tem plano ativo
     if(expirado && !planoAtivo) {
@@ -2203,63 +2242,105 @@ function copiarPix() {
 }
 
 // ─── ADMIN ───
+let adminTabAtual = 'usuarios';
+
+function switchAdminTab(tab) {
+  adminTabAtual = tab;
+  const btnU = document.getElementById('abaUsuarios');
+  const btnC = document.getElementById('abaClientes');
+  if(tab === 'usuarios') {
+    btnU.style.background = 'var(--teal-glow)'; btnU.style.color = 'var(--teal)'; btnU.style.borderBottom = '2px solid var(--teal)';
+    btnC.style.background = 'transparent'; btnC.style.color = 'var(--text-muted)'; btnC.style.borderBottom = '2px solid transparent';
+    renderAdminUsuarios();
+  } else {
+    btnC.style.background = 'var(--teal-glow)'; btnC.style.color = 'var(--teal)'; btnC.style.borderBottom = '2px solid var(--teal)';
+    btnU.style.background = 'transparent'; btnU.style.color = 'var(--text-muted)'; btnU.style.borderBottom = '2px solid transparent';
+    renderAdminClientes();
+  }
+}
+
 async function loadAdminUsers() {
   if(currentUserEmail !== ADMIN_EMAIL) return;
-
   const lista = document.getElementById('adminUsersList');
   lista.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text-muted)">Carregando...</div>';
+  await renderAdminUsuarios();
+}
 
-  const { data: subs, error } = await sb.from('fa_subscriptions').select('*').order('created_at', { ascending: false });
+async function renderAdminUsuarios() {
+  if(currentUserEmail !== ADMIN_EMAIL) return;
+  const lista = document.getElementById('adminUsersList');
+
+  const { data: subs, error } = await sb.from('fa_subscriptions')
+    .select('*').order('created_at', { ascending: false });
 
   if(error || !subs) {
-    lista.innerHTML = '<div style="text-align:center;padding:30px;color:var(--red)">Erro ao carregar usuários</div>';
+    lista.innerHTML = '<div style="text-align:center;padding:30px;color:var(--red)">Erro ao carregar</div>';
     return;
   }
 
+  // Deduplicar por user_id
+  const unique = [...new Map(subs.map(s => [s.user_id, s])).values()];
+
   // Stats
   const agora = new Date();
-  const ativos = subs.filter(s => new Date(s.data_expiracao) > agora).length;
-  const expirados = subs.filter(s => new Date(s.data_expiracao) <= agora).length;
-  const trial = subs.filter(s => s.plano === 'trial').length;
+  const ativos = unique.filter(s => new Date(s.data_expiracao) > agora).length;
+  const expirados = unique.filter(s => new Date(s.data_expiracao) <= agora).length;
+  const trial = unique.filter(s => s.plano === 'trial').length;
 
-  document.getElementById('adminTotalUsers').textContent = subs.length;
+  document.getElementById('adminTotalUsers').textContent = unique.length;
   document.getElementById('adminAtivos').textContent = ativos;
   document.getElementById('adminExpirados').textContent = expirados;
   document.getElementById('adminTrial').textContent = trial;
 
-  // Lista
-  const html = `
+  lista.innerHTML = `
     <div class="admin-row admin-header">
-      <span>Nome</span><span>E-mail</span><span>Expira em</span><span>Ação</span>
+      <span>Nome</span><span>E-mail</span><span>Plano / Status</span><span>Ação</span>
     </div>
-    ${subs.map(s => {
+    ${unique.map(s => {
       const exp = new Date(s.data_expiracao);
       const expirado = agora > exp;
-      const diasRestantes = Math.ceil((exp - agora) / (1000*60*60*24));
+      const dias = Math.ceil((exp - agora) / (1000*60*60*24));
       const statusClass = expirado ? 'admin-expired' : 'admin-active';
-      const statusText = expirado ? '⚠️ EXPIRADO' : `✅ ${diasRestantes} dias`;
-      return `
-        <div class="admin-row">
-          <span style="font-weight:600">${s.nome || '-'}</span>
-          <span style="color:var(--text-muted);font-size:13px">${s.email}</span>
-          <span class="${statusClass}">${statusText}</span>
-          <button class="admin-btn" onclick="ativar30Dias('${s.id}', '${s.email}')">⚡ +30 dias</button>
-        </div>`;
-    }).join('')}
-  `;
+      const statusText = expirado ? '⚠️ EXPIRADO' : `✅ ${dias}d — ${s.plano||'trial'}`;
+      return `<div class="admin-row">
+        <span style="font-weight:600">${s.nome||'-'}</span>
+        <span style="color:var(--text-muted);font-size:12px">${s.email}</span>
+        <span class="${statusClass}" style="font-size:12px">${statusText}</span>
+        <button class="admin-btn" onclick="ativar30Dias('${s.id}','${s.email}')">⚡ +30 dias</button>
+      </div>`;
+    }).join('')}`;
+}
 
-  lista.innerHTML = html;
+async function renderAdminClientes() {
+  if(currentUserEmail !== ADMIN_EMAIL) return;
+  const lista = document.getElementById('adminUsersList');
+  lista.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-muted)">Carregando clientes...</div>';
+
+  // Admin usa service role — buscar todos via subscriptions
+  const { data: subs } = await sb.from('fa_subscriptions').select('user_id, email, nome');
+  
+  lista.innerHTML = `
+    <div class="admin-row admin-header">
+      <span>Dono (e-mail)</span><span>Nome Empresa</span><span>Total Clientes</span><span>-</span>
+    </div>
+    ${(subs||[]).map(s => `
+      <div class="admin-row">
+        <span style="font-size:12px;color:var(--text-muted)">${s.email}</span>
+        <span style="font-weight:600">${s.nome||'-'}</span>
+        <span style="color:var(--teal)">Ver no banco</span>
+        <span style="font-size:11px;color:var(--text-dim)">user_id: ${(s.user_id||'').slice(0,8)}...</span>
+      </div>`).join('')}`;
 }
 
 async function ativar30Dias(subId, email) {
   if(currentUserEmail !== ADMIN_EMAIL) return;
-  const novaExpiracao = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+  const novaExp = new Date(Date.now() + 30*24*60*60*1000).toISOString();
   const { error } = await sb.from('fa_subscriptions')
-    .update({ data_expiracao: novaExpiracao, plano: 'pro', ativo: true, updated_at: new Date().toISOString() })
+    .update({ data_expiracao: novaExp, plano: 'pro', ativo: true, updated_at: new Date().toISOString() })
     .eq('id', subId);
   if(error) { showToast('Erro ao ativar!', '❌'); return; }
   showToast(`✅ ${email} ativado por 30 dias!`, '✅');
-  loadAdminUsers();
+  renderAdminUsuarios();
 }
 
 function showRegister() {
@@ -2341,6 +2422,7 @@ function navigate(page, el) {
   if(page === 'invoices') renderInvoices();
   if(page === 'admin') loadAdminUsers();
   if(page === 'settings') loadAccountInfo();
+  if(page === 'plans') atualizarInfoPlano();
 }
 
 // ═══════════════════════════════════════
@@ -2491,6 +2573,8 @@ async function loadClients() {
 }
 
 async function addClient() {
+  // Verificar limite do trial
+  if(!verificarLimiteTrial()) return;
   const name = document.getElementById('newClientName').value.trim();
   const phone = document.getElementById('newClientPhone').value.trim();
   const email = document.getElementById('newClientEmail').value.trim();
@@ -2826,6 +2910,136 @@ function updateBubble(text) {
 
 function openWaPlan(plan, price) {
   openPixModal(plan, price);
+}
+
+// ═══════════════════════════════════════
+// UPGRADE VIA WHATSAPP
+// ═══════════════════════════════════════
+async function upgradePlano(plano, valor) {
+  const { data: { user } } = await sb.auth.getUser();
+  const email = user ? user.email : 'não identificado';
+  const msg = `Olá! Quero assinar o Plano ${plano} R$ ${valor}/mês do FluxoAzul. Meu email: ${email}`;
+  window.open(`https://wa.me/5531984132145?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+// ═══════════════════════════════════════
+// TRAVAS POR PLANO
+// ═══════════════════════════════════════
+function verificarLimiteTrial() {
+  if(!currentSubscription) return true;
+  const plano = currentSubscription.plano || 'trial';
+  if(plano === 'trial' && clients.length >= 10) {
+    abrirModalLimite(
+      '🔒 Limite do Trial Atingido',
+      'Você atingiu o limite de 10 clientes no plano Trial.',
+      'Para cadastrar mais clientes, faça upgrade para o plano Pro.',
+      'Pro', '69,90'
+    );
+    return false;
+  }
+  return true;
+}
+
+function verificarLimitePDF() {
+  if(!currentSubscription) return false;
+  const plano = currentSubscription.plano || 'trial';
+  if(plano === 'business' || plano === 'premium') return true;
+  abrirModalLimite(
+    '📄 Recurso Business',
+    'O relatório PDF mensal está disponível no plano Business.',
+    'Faça upgrade para acessar relatórios completos em PDF.',
+    'Business', '97,90'
+  );
+  return false;
+}
+
+function verificarLimiteMentoria() {
+  if(!currentSubscription) return false;
+  const plano = currentSubscription.plano || 'trial';
+  if(plano === 'premium') return true;
+  abrirModalLimite(
+    '🎯 Recurso Premium',
+    'A mentoria 1h/mês está disponível no plano Premium.',
+    'Faça upgrade para agendar sua mentoria mensal.',
+    'Premium', '147,90'
+  );
+  return false;
+}
+
+function abrirModalLimite(titulo, desc, detalhe, plano, valor) {
+  const overlay = document.getElementById('limiteModal');
+  if(!overlay) return;
+  document.getElementById('limiteTitulo').textContent = titulo;
+  document.getElementById('limiteDesc').textContent = desc;
+  document.getElementById('limiteDetalhe').textContent = detalhe;
+  document.getElementById('limiteBtn').onclick = () => { upgradePlano(plano, valor); closeModal('limiteModal'); };
+  document.getElementById('limiteBtn').textContent = `💬 Assinar ${plano} — R$ ${valor}/mês`;
+  overlay.classList.add('open');
+}
+
+// Gerador de PDF (Business+)
+function gerarRelatorioPDF() {
+  if(!verificarLimitePDF()) return;
+  const agora = new Date();
+  const mes = agora.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+  const pago = invoices.filter(i => i.status === 'paid').reduce((s,i) => s+Number(i.amount), 0);
+  const pendente = invoices.filter(i => i.status !== 'paid').reduce((s,i) => s+Number(i.amount), 0);
+
+  const conteudo = `
+FLUXO AZUL — RELATÓRIO MENSAL
+${mes.toUpperCase()}
+=====================================
+Empresa: ${companyName || 'Minha Empresa'}
+Gerado em: ${agora.toLocaleDateString('pt-BR')}
+
+RESUMO FINANCEIRO
+─────────────────
+Total Recebido:  ${fmtMoney(pago)}
+Total Pendente:  ${fmtMoney(pendente)}
+Total Geral:     ${fmtMoney(pago + pendente)}
+
+CLIENTES CADASTRADOS (${clients.length})
+─────────────────
+${clients.map(c => `${c.name} — ${c.phone}`).join('
+')}
+
+COBRANÇAS DO MÊS
+─────────────────
+${invoices.map(i => `${i.client_name} | ${fmtMoney(i.amount)} | ${fmtDate(i.due_date||i.due)} | ${i.status}`).join('
+')}
+
+=====================================
+Fluxo Azul — Conta no Azul, Empresa no Topo
+  `;
+
+  const blob = new Blob([conteudo], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `relatorio-fluxoazul-${agora.getMonth()+1}-${agora.getFullYear()}.txt`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Relatório gerado com sucesso!', '✅');
+}
+
+// Mentoria Premium
+function agendarMentoria() {
+  if(!verificarLimiteMentoria()) return;
+  const msg = 'Oi Ronilson, sou Premium e quero agendar minha mentoria de 1h deste mês!';
+  window.open(`https://wa.me/5531984132145?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+// Atualizar info do plano atual na página de planos
+function atualizarInfoPlano() {
+  if(!currentSubscription) return;
+  const nomeEl = document.getElementById('planoAtualNome');
+  const expiraEl = document.getElementById('planoAtualExpira');
+  if(!nomeEl || !expiraEl) return;
+  const plano = currentSubscription.plano || 'trial';
+  const exp = new Date(currentSubscription.data_expiracao);
+  const dias = Math.max(0, Math.ceil((exp - new Date()) / (1000*60*60*24)));
+  nomeEl.textContent = plano.charAt(0).toUpperCase() + plano.slice(1);
+  expiraEl.textContent = dias > 0 ? `Expira em ${dias} dia(s)` : 'Expirado — Renove agora!';
 }
 
 // ═══════════════════════════════════════
